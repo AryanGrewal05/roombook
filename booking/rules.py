@@ -12,9 +12,9 @@ def overlaps(a_start, a_end, b_start, b_end):
     return a_start < b_end and b_start < a_end
 
 
-MAX_HOURS = 2
+MAX_MINUTES = 120
 
 
 def exceeds_limit(start, end):
-    """Bookings longer than MAX_HOURS are refused."""
-    return duration(start, end) > MAX_HOURS
+    """Bookings longer than MAX_MINUTES are refused."""
+    return duration(start, end) > MAX_MINUTES
