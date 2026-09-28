@@ -1,5 +1,7 @@
 from datetime import datetime as dt
+
 from booking.rules import exceeds_limit
+
 
 def T(h, m=0):
     return dt(2026, 10, 20, h, m)
