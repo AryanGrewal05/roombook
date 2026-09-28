@@ -19,4 +19,4 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - run: python -m pytest booking/tests/test_rules.py booking/tests/test_limit.py
+      - run: python -m pytest booking/tests/unit
