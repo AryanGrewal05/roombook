@@ -5,7 +5,7 @@ T = lambda h, m=0: dt(2026, 10, 20, h, m)
 
 
 def test_duration_of_ninety_minutes():
-    assert duration(T(9), T(10, 30)) == 1.5
+    assert duration(T(9), T(10, 30)) == 90
 
 
 def test_back_to_back_is_allowed():

@@ -2,8 +2,8 @@
 
 
 def duration(start, end):
-    """Length of a booking, in hours."""
-    return (end - start).total_seconds() / 3600
+    """Length of a booking, in whole minutes."""
+    return int((end - start).total_seconds() // 60)
 
 
 def overlaps(a_start, a_end, b_start, b_end):
