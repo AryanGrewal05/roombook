@@ -43,8 +43,8 @@ jobs:
         image: mongo:8.0
         ports: ["27017:27017"]
         options: >-
-          --health-cmd "mongosh --quiet --eval 'db.runCommand({ping: 1})'"
-          --health-interval 5s --health-timeout 5s --health-retries 10
+          --health-cmd "mongosh --eval 'db.runCommand({ping:1})'"
+          --health-interval 5s --health-retries 10
     env:
       MONGODB_URI: mongodb://localhost:27017
     steps:
@@ -56,15 +56,15 @@ jobs:
 
   package:
     needs: integration
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
-      - run: git archive --format=tar.gz -o roombook-${{ github.sha }}.tar.gz HEAD
+      - run: git archive -o roombook.tar.gz HEAD
       - uses: actions/upload-artifact@v7
         with:
           name: roombook-${{ github.sha }}
-          path: roombook-${{ github.sha }}.tar.gz
+          path: roombook.tar.gz
 
   deploy-staging:
     needs: package
@@ -72,8 +72,9 @@ jobs:
     environment: staging
     steps:
       - uses: actions/download-artifact@v8
-        with: { name: "roombook-${{ github.sha }}" }
-      - run: echo "deploy roombook-${{ github.sha }} to staging"
+        with:
+          name: roombook-${{ github.sha }}
+      - run: sha256sum roombook.tar.gz   # record what was deployed
 
   deploy-production:
     needs: deploy-staging
@@ -81,5 +82,6 @@ jobs:
     environment: production
     steps:
       - uses: actions/download-artifact@v8
-        with: { name: "roombook-${{ github.sha }}" }
-      - run: echo "deploy the SAME artifact to production"
+        with:
+          name: roombook-${{ github.sha }}
+      - run: sha256sum roombook.tar.gz   # must match staging
