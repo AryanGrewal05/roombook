@@ -54,6 +54,15 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python manage.py test booking.tests.integration
 
+  ci-gate:
+    if: always()
+    needs: [lint, unit, integration]
+    runs-on: ubuntu-24.04
+    steps:
+      - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1
+      - run: echo "lint, unit and integration all passed"
+
   package:
     needs: integration
     if: github.ref == 'refs/heads/main'
