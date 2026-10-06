@@ -20,3 +20,16 @@ REST_FRAMEWORK = {
     "UNAUTHENTICATED_USER": None,
 }
 USE_TZ = True
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+# Production-only hardening, switched on by the deploy environment.
+if os.environ.get("DJANGO_SECURE") == "1":
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    CSRF_COOKIE_SECURE = True

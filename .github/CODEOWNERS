@@ -1,0 +1,3 @@
+# Changes to the pipeline or to the tests need a maintainer review.
+/.github/        @fsc-csc325/roombook-maintainers
+/booking/tests/  @fsc-csc325/roombook-maintainers
