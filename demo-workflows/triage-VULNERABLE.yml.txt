@@ -1,0 +1,11 @@
+name: Triage
+on:
+  issues:
+    types: [opened]
+permissions:
+  contents: read
+jobs:
+  label:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "Triage ${{ github.event.issue.title }}"
