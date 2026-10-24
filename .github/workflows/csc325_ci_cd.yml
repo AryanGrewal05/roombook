@@ -1,0 +1,78 @@
+
+name: CSC325 CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  setup:
+    name: Setup
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Check Python
+        run: python --version
+
+  dependencies:
+    name: Dependencies
+    needs: setup
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+  test:
+    name: Test
+    needs: dependencies
+    runs-on: ubuntu-24.04
+    services:
+      mongodb:
+        image: mongo:8.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ping:1})'"
+          --health-interval 5s
+          --health-retries 10
+    env:
+      MONGODB_URI: mongodb://localhost:27017
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run unit tests
+        run: python -m pytest booking/tests/unit
+      - name: Run integration tests
+        run: python manage.py test booking.tests.integration
+
+  deploy:
+    name: Deploy
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Trigger Render deployment
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          test -n "$RENDER_DEPLOY_HOOK_URL"
+          curl --fail --show-error --silent \
+            -X POST "$RENDER_DEPLOY_HOOK_URL"
