@@ -2,8 +2,11 @@ import os
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "ci-only-not-a-secret")
 DEBUG = False
-ALLOWED_HOSTS = ["localhost", "testserver"]
-ROOT_URLCONF = "config.urls"
+ALLOWED_HOSTS = [
+    "localhost",
+    "testserver",
+    ".onrender.com",
+]ROOT_URLCONF = "config.urls"
 INSTALLED_APPS = ["django_mongodb_backend", "rest_framework", "booking"]
 DATABASES = {
     "default": {
