@@ -1,6 +1,7 @@
 
-from django.urls import path
 from django.http import JsonResponse
+from django.urls import path
+
 from booking.views import create_booking
 
 
@@ -9,7 +10,7 @@ def home(request):
         "app": "RoomBook",
         "status": "running",
         "message": "Welcome to the CSC325 RoomBook API",
-        "endpoints": ["/api/bookings/", "/api/status/"]
+        "endpoints": ["/api/bookings/", "/api/status/"],
     })
 
 
@@ -17,7 +18,7 @@ def room_status(request):
     return JsonResponse({
         "service": "RoomBook",
         "status": "available",
-        "message": "Room booking service is available"
+        "message": "Room booking service is available",
     })
 
 
