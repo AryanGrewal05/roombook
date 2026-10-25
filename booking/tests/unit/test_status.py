@@ -1,9 +1,11 @@
 
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-
+import django
 from django.test import Client
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+django.setup()
 
 
 def test_room_status():
