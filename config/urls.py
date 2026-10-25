@@ -1,21 +1,28 @@
 
-import os
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-
-from django.test import Client
+from django.urls import path
+from django.http import JsonResponse
+from booking.views import create_booking
 
 
-def test_room_status():
-    response = Client().get("/api/status/")
-    assert response.status_code == 200
+def home(request):
+    return JsonResponse({
+        "app": "RoomBook",
+        "status": "running",
+        "message": "Welcome to the CSC325 RoomBook API",
+        "endpoints": ["/api/bookings/", "/api/status/"]
+    })
 
-    data = response.json()
-    assert data["status"] == "available"
-    assert data["service"] == "RoomBook"
+
+def room_status(request):
+    return JsonResponse({
+        "service": "RoomBook",
+        "status": "available",
+        "message": "Room booking service is available"
+    })
 
 
-def test_home():
-    response = Client().get("/")
-    assert response.status_code == 200
-    assert "/api/status/" in response.json()["endpoints"]
+urlpatterns = [
+    path("", home, name="home"),
+    path("api/bookings/", create_booking),
+    path("api/status/", room_status, name="room_status"),
+]
