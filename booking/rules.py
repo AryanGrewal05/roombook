@@ -17,4 +17,4 @@ MAX_MINUTES = 120
 
 def exceeds_limit(start, end):
     """Bookings longer than MAX_MINUTES are refused."""
-    return duration(start, end) > MAX_MINUTES
+    return (end - start).total_seconds() > MAX_MINUTES * 60

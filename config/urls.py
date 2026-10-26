@@ -1,5 +1,6 @@
-from django.urls import path
 from django.http import JsonResponse
+from django.urls import path
+
 from booking.views import create_booking
 
 
