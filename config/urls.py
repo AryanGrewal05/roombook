@@ -17,6 +17,7 @@ def room_status(request):
     return JsonResponse({
         "service": "RoomBook",
         "status": "available",
+        "version": "module8-demo",
         "message": "Room booking service is available",
     })
 
