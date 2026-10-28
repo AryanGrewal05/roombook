@@ -11,6 +11,13 @@ class BookingSerializer(serializers.ModelSerializer):
         model = Booking
         fields = ["room", "start", "end"]
 
+    def validate(self, attrs):
+        if attrs["end"] <= attrs["start"]:
+            raise serializers.ValidationError({
+                "end": "End must be after start."
+            })
+        return attrs
+
 
 @api_view(["POST"])
 def create_booking(request):

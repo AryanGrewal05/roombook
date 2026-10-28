@@ -21,3 +21,9 @@ def test_home():
     response = Client().get("/")
     assert response.status_code == 200
     assert "/api/status/" in response.json()["endpoints"]
+
+
+def test_room_status_reports_demo_version():
+    response = Client().get("/api/status/")
+    assert response.status_code == 200
+    assert response.json()["version"] == "module8-demo"
